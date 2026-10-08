@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mochii 💜</title>
+<style>
+:root{--purple:#8965c7;--lav:#eee7ff;--white:#fff;--ink:#403454}
+*{box-sizing:border-box}
+body{margin:0;background:#f8f5ff;color:var(--ink);font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#dcd0ff,#f5edff);padding:25px 18px;text-align:center}
+header h1{font-size:38px;margin:4px}
+header p{margin:8px}
+main{max-width:850px;margin:auto;padding:18px}
+nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:15px}
+button,.tab{border:0;border-radius:14px;padding:11px 15px;background:#e9dfff;color:#503878;font-weight:bold;cursor:pointer}
+button:hover,.tab.active{background:var(--purple);color:white}
+.card{background:white;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 4px 16px #7860a514}
+h2{color:#7754b5}
+input,textarea,select{width:100%;padding:12px;border:1px solid #d9cafa;border-radius:12px;margin:7px 0;font:inherit}
+textarea{min-height:90px}
+.item{padding:10px;background:#f5f0ff;border-radius:12px;margin:8px 0;overflow-wrap:anywhere}
+.item button{margin-left:6px;padding:7px}
+.mascot{font-size:65px}
+.page{display:none}.page.active{display:block}
+.small{font-size:13px;color:#776b89}
+footer{text-align:center;padding:25px;color:#776b89}
+</style>
+</head>
+<body>
+<header>
+<div class="mascot" id="mascot">🐰</div>
+<h1>Welcome to Mochii 💜</h1>
+<p>Your little corner of creativity, comfort, and fun!</p>
+</header>
+<nav id="nav"></nav>
+<main>
+<section class="page active" id="Home">
+<div class="card">
+<h2 id="hello">Hello, Mochii friend! 🌷</h2>
+<p>What lovely thing will you do today?</p>
+<button onclick="showPage('Planner')">Open my planner</button>
+<button onclick="showPage('Character')">Dress up Mochii</button>
+</div>
+<div class="card"><h2>🌸 Your cozy spaces</h2><p>Make plans, write stories, dream up worlds, and play!</p></div>
+</section>
+
+<section class="page" id="Character">
+<div class="card"><h2>🐰 Character Creator</h2>
+<label>Choose your Mochii</label>
+<select id="pet"><option>🐰 Bunny</option><option>🐱 Kitty</option><option>🐻 Bear</option><option>🐸 Frog</option><option>🐼 Panda</option><option>🦊 Fox</option></select>
+<label>Choose a face</label>
+<select id="face"><option>😊</option><option>🥹</option><option>😎</option><option>😴</option><option>😛</option></select>
+<label>Choose an accessory</label>
+<select id="accessory"><option>⭐ Star</option><option>🌷 Flower</option><option>🪽 Wings</option><option>👑 Crown</option><option>🍓 Strawberry</option></select>
+<input id="petname" placeholder="Give your character a name">
+<button onclick="saveCharacter()">Save my character 💜</button>
+</div></section>
+
+<section class="page" id="Planner"><div class="card">
+<h2>📒 My Planner</h2>
+<input id="task" placeholder="What do you need to do?">
+<button onclick="addItem('tasks','task')">Add task</button><div id="tasks"></div>
+</div></section>
+
+<section class="page" id="Journal"><div class="card">
+<h2>📔 My Journal</h2>
+<input id="jtitle" placeholder="Entry title">
+<textarea id="journal" placeholder="Write about your day, ideas, or feelings..."></textarea>
+<button onclick="saveJournal()">Save journal entry</button><div id="journals"></div>
+</div></section>
+
+<section class="page" id="Create"><div class="card">
+<h2>🎨 Idea Canvas</h2>
+<input id="createtitle" placeholder="Idea name">
+<textarea id="create" placeholder="Describe your amazing idea!"></textarea>
+<button onclick="saveNote('ideas','createtitle','create')">Save idea</button><div id="ideas"></div>
+</div></section>
+
+<section class="page" id="Music"><div class="card">
+<h2>🎵 Cozy Melodies</h2>
+<input id="musictitle" placeholder="Song or playlist name">
+<textarea id="music" placeholder="Songs, artists, lyrics ideas, or playlist vibes..."></textarea>
+<button onclick="saveNote('songs','musictitle','music')">Save music idea</button><div id="songs"></div>
+</div></section>
+
+<section class="page" id="Style"><div class="card">
+<h2>👗 My Style Book</h2>
+<input id="styletitle" placeholder="Outfit name">
+<textarea id="style" placeholder="Describe your outfit, colors, and accessories..."></textarea>
+<button onclick="saveNote('outfits','styletitle','style')">Save outfit</button><div id="outfits"></div>
+</div></section>
+
+<section class="page" id="World"><div class="card">
+<h2>🌎 Mochii World</h2>
+<input id="worldtitle" placeholder="Name your imaginary world">
+<textarea id="world" placeholder="Who lives there? What makes it magical?"></textarea>
+<button onclick="saveNote('worlds','worldtitle','world')">Create world</button><div id="worlds"></div>
+</div></section>
+
+<section class="page" id="Recipes"><div class="card">
+<h2>🍰 Sweet Kitchen</h2>
+<input id="recipetitle" placeholder="Recipe name">
+<textarea id="recipe" placeholder="Ingredients and steps..."></textarea>
+<button onclick="saveNote('recipes','recipetitle','recipe')">Save recipe</button><div id="recipes"></div>
+</div></section>
+
+<section class="page" id="Games"><div class="card">
+<h2>🎲 Secret Number</h2>
+<p>I'm thinking of a number from 1 to 10. Can you guess it?</p>
+<input id="guess" type="number" min="1" max="10" placeholder="Your guess">
+<button onclick="playGame()">Guess!</button>
+<p id="gameanswer">Good luck! 💜</p>
+<button onclick="newGame()">New game</button>
+</div></section>
+
+<section class="page" id="Profile"><div class="card">
+<h2>💜 My Profile</h2>
+<label>What should Mochii call you?</label>
+<input id="username" placeholder="Your display name">
+<button onclick="saveName()">Save my name</button>
+<p class="small">Your name and creations are saved in this browser.</p>
+<button onclick="resetApp()">Reset all Mochii data</button>
+</div></section>
+</main>
+<footer>Made with love in Mochii 💜 🫧</footer>
+<script>
+const pages=['Home','Character','Planner','Journal','Create','Music','Style','World','Recipes','Games','Profile'];
+const labels=['🏡 Home','🐰 Character','📒 Planner','📔 Journal','🎨 Create','🎵 Music','👗 Style','🌎 Mochii World','🍰 Recipes','🎲 Games','💜 Profile'];
+const key='mochii_v1_';
+function get(k){try{return JSON.parse(localStorage.getItem(key+k))||[]}catch{return []}}
+function put(k,v){localStorage.setItem(key+k,JSON.stringify(v))}
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+window.scrollTo(0,0)
+}
+const nav=document.getElementById('nav');
+pages.forEach((p,i)=>{let b=document.createElement('button');b.className='tab'+(i===0?' active':'');b.dataset.page=p;b.textContent=labels[i];b.onclick=()=>showPage(p);nav.appendChild(b)});
+function addItem(k,id){
+let el=document.getElementById(id),v=el.value.trim();if(!v)return;
+let a=get(k);a.push({text:v,done:false});put(k,a);el.value='';render(k)
+}
+function render(k){
+let box=document.getElementById(k);if(!box)return;box.innerHTML='';
+get(k).forEach((o,i)=>{
+let d=document.createElement('div');d.className='item';
+let t=document.createElement('span');t.textContent=(o.done?'☑ ':'')+o.text;
+if(o.done)t.style.textDecoration='line-through';
+d.appendChild(t);
+if(k==='tasks'){let b=document.createElement('button');b.textContent=o.done?'Undo':'Done';b.onclick=()=>{let a=get(k);a[i].done=!a[i].done;put(k,a);render(k)};d.appendChild(b)}
+let del=document.createElement('button');del.textContent='Delete';del.onclick=()=>{let a=get(k);a.splice(i,1);put(k,a);render(k)};d.appendChild(del);box.appendChild(d)
+})
+}
+function saveNote(k,titleId,textId){
+let title=document.getElementById(titleId).value.trim(),text=document.getElementById(textId).value.trim();
+if(!title&&!text)return;let a=get(k);a.push({text:(title?title+': ':'')+text});put(k,a);
+document.getElementById(titleId).value='';document.getElementById(textId).value='';render(k)
+}
+function saveJournal(){saveNote('journals','jtitle','journal')}
+function saveCharacter(){
+let c={pet:document.getElementById('pet').value,face:document.getElementById('face').value,accessory:document.getElementById('accessory').value,name:document.getElementById('petname').value.trim()};
+localStorage.setItem(key+'character',JSON.stringify(c));showCharacter()
+}
+function showCharacter(){
+try{let c=JSON.parse(localStorage.getItem(key+'character'));if(c){
+document.getElementById('mascot').textContent=c.pet.split(' ')[0]+' '+c.face;
+document.getElementById('petname').value=c.name||''
+}}catch{}
+}
+function saveName(){
+let n=document.getElementById('username').value.trim();if(!n)return;
+localStorage.setItem(key+'name',n);document.getElementById('hello').textContent='Hello, '+n+'! 🌷'
+}
+function playGame(){
+let n=Number(document.getElementById('guess').value);
+if(!n||n<1||n>10){document.getElementById('gameanswer').textContent='Pick a number from 1 to 10!';return}
+if(!window.secretNumber)window.secretNumber=Math.floor(Math.random()*10)+1;
+document.getElementById('gameanswer').textContent=n===window.secretNumber?'You got it! 🎉':'Not quite! Try '+(n<window.secretNumber?'a higher':'a lower')+' number.'
+}
+function newGame(){window.secretNumber=Math.floor(Math.random()*10)+1;document.getElementById('guess').value='';document.getElementById('gameanswer').textContent='New number picked! Guess again 💜'}
+function resetApp(){if(confirm('Delete all Mochii data saved in this browser?')){Object.keys(localStorage).filter(k=>k.startsWith(key)).forEach(k=>localStorage.removeItem(k));location.reload()}}
+try{let n=localStorage.getItem(key+'name');if(n){document.getElementById('username').value=n;document.getElementById('hello').textContent='Hello, '+n+'! 🌷'}}catch{}
+showCharacter();
+['tasks','journals','ideas','songs','outfits','worlds','recipes'].forEach(render);
+</script>
+</body>
+</html>
