@@ -186,4 +186,283 @@ showCharacter();
 ['tasks','journals','ideas','songs','outfits','worlds','recipes'].forEach(render);
 </script>
 </body>
+<section id="mochii-custom" style="background:#f3edff;color:#493765;padding:22px;border-radius:22px;margin:20px auto;max-width:760px;font-family:Arial,sans-serif;">
+  <h2 style="color:#8063c7;">🎨 Customize Mochii</h2>
+  <p>Pick your favorite colors and decorate your cozy space! 🫧</p>
+
+  <div style="background:white;padding:18px;border-radius:18px;">
+    <h3>💜 Choose your theme</h3>
+    <button type="button" data-mc-color="#f3edff" style="background:#f3edff;color:#493765;border:2px solid #d5c4ff;border-radius:12px;padding:12px;margin:4px;">Lavender</button>
+    <button type="button" data-mc-color="#e8f5ff" style="background:#e8f5ff;color:#34516b;border:2px solid #b8dcff;border-radius:12px;padding:12px;margin:4px;">Sky Blue</button>
+    <button type="button" data-mc-color="#e8f8ed" style="background:#e8f8ed;color:#315a43;border:2px solid #b8e2c6;border-radius:12px;padding:12px;margin:4px;">Mint</button>
+    <button type="button" data-mc-color="#fff3df" style="background:#fff3df;color:#75522a;border:2px solid #f2d4a4;border-radius:12px;padding:12px;margin:4px;">Peach</button>
+
+    <h3>🌟 Choose a decoration</h3>
+    <button type="button" data-mc-deco="🦋">🦋 Butterfly</button>
+    <button type="button" data-mc-deco="⭐">⭐ Star</button>
+    <button type="button" data-mc-deco="🌷">🌷 Flower</button>
+    <button type="button" data-mc-deco="🎀">🎀 Bow</button>
+
+    <div id="mc-preview" style="margin-top:18px;padding:22px;border-radius:16px;background:#f3edff;text-align:center;">
+      <div id="mc-deco" style="font-size:38px;">🦋</div>
+      <h3>My Mochii Space 💜</h3>
+      <p>Your cozy corner, your rules!</p>
+    </div>
+    <p id="mc-message">Choose a theme to decorate your space!</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  const preview = document.getElementById("mc-preview");
+  const decoration = document.getElementById("mc-deco");
+  const message = document.getElementById("mc-message");
+
+  document.querySelectorAll("[data-mc-color]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      preview.style.backgroundColor = button.dataset.mcColor;
+      message.textContent = "Your theme has changed! ✨";
+    });
+  });
+
+  document.querySelectorAll("[data-mc-deco]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      decoration.textContent = button.dataset.mcDeco;
+      message.textContent = "Your decoration has changed! 💜";
+    });
+  });
+})();
+</script>
+
+<section id="mochii-pets" style="background:#f3edff;color:#493765;padding:22px;border-radius:22px;margin:20px auto;max-width:760px;font-family:Arial,sans-serif;">
+  <h2 style="color:#8063c7;">🐾 Mochii Pets</h2>
+  <p>Adopt a tiny friend and take care of it! 💜</p>
+
+  <div style="background:white;padding:20px;border-radius:18px;text-align:center;">
+    <div id="mp-face" style="font-size:75px;">🐰</div>
+    <h3 id="mp-name">BunBun</h3>
+    <p>Happiness: <strong id="mp-hearts">💜💜💜</strong></p>
+    <label for="mp-choose">Choose your pet:</label>
+    <select id="mp-choose" style="padding:10px;border-radius:10px;margin:10px;">
+      <option value="🐰">Bunny</option>
+      <option value="🐱">Kitten</option>
+      <option value="🐶">Puppy</option>
+      <option value="🐹">Hamster</option>
+      <option value="🦊">Fox</option>
+    </select>
+    <input id="mp-name-input" maxlength="20" placeholder="Give your pet a name" style="width:95%;padding:12px;border:1px solid #cbb9ef;border-radius:10px;margin:8px 0;">
+    <button type="button" id="mp-adopt" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:5px;">✨ Adopt / Rename</button>
+    <p id="mp-message">Your new friend is happy to meet you!</p>
+    <button type="button" id="mp-feed" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:5px;">🥕 Feed pet</button>
+    <button type="button" id="mp-play" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:5px;">🧶 Play together</button>
+  </div>
+</section>
+
+<script>
+(function () {
+  const choose = document.getElementById("mp-choose");
+  const face = document.getElementById("mp-face");
+  const nameInput = document.getElementById("mp-name-input");
+  const nameText = document.getElementById("mp-name");
+  const hearts = document.getElementById("mp-hearts");
+  const message = document.getElementById("mp-message");
+  let happiness = 3;
+
+  function showHearts() {
+    hearts.textContent = "💜".repeat(happiness) + "🤍".repeat(5 - happiness);
+  }
+
+  choose.addEventListener("change", function () {
+    face.textContent = choose.value;
+  });
+
+  document.getElementById("mp-adopt").addEventListener("click", function () {
+    const petName = nameInput.value.trim();
+    if (!petName) {
+      message.textContent = "Type a name for your pet first! 🐾";
+      return;
+    }
+    nameText.textContent = petName;
+    face.textContent = choose.value;
+    message.textContent = "Yay! " + petName + " is your new bestie! ✨";
+  });
+
+  document.getElementById("mp-feed").addEventListener("click", function () {
+    happiness = Math.min(5, happiness + 1);
+    showHearts();
+    message.textContent = nameText.textContent + " enjoyed the snack! 🥕";
+  });
+
+  document.getElementById("mp-play").addEventListener("click", function () {
+    happiness = Math.min(5, happiness + 1);
+    showHearts();
+    message.textContent = nameText.textContent + " had so much fun with you! 🎉";
+  });
+
+  showHearts();
+})();
+</script>
+
+<section id="mochii-music" style="background:#f3edff;color:#493765;padding:22px;border-radius:22px;margin:20px auto;max-width:760px;font-family:Arial,sans-serif;">
+  <h2 style="color:#8063c7;">🎧 Mochii Music</h2>
+  <p>Your cozy soundtrack for games, creativity, and relaxing. 💜</p>
+
+  <div style="background:white;padding:18px;border-radius:16px;margin:14px 0;">
+    <h3>🌙 Mochii Dream — built-in instrumental</h3>
+    <p id="mm-status">Press play to start a gentle original tone melody.</p>
+    <button type="button" id="mm-play" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:4px;">▶ Play</button>
+    <button type="button" id="mm-stop" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:4px;">■ Stop</button>
+    <p style="font-size:13px;">This creates a simple melody using your browser; it is not a full recorded song.</p>
+  </div>
+
+  <div style="background:white;padding:18px;border-radius:16px;margin:14px 0;">
+    <h3>▶️ Listen on YouTube</h3>
+    <p>Paste a YouTube video link to open your chosen music.</p>
+    <input id="mm-link" placeholder="Paste a YouTube link here" style="width:95%;padding:12px;border:1px solid #cbb9ef;border-radius:10px;">
+    <button type="button" id="mm-open" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin-top:10px;">Open music</button>
+    <p id="mm-message" style="font-size:13px;"></p>
+  </div>
+</section>
+
+<script>
+(function () {
+  const play = document.getElementById("mm-play");
+  const stop = document.getElementById("mm-stop");
+  const status = document.getElementById("mm-status");
+  const link = document.getElementById("mm-link");
+  const message = document.getElementById("mm-message");
+  let audio = null;
+  let timer = null;
+  let noteIndex = 0;
+
+  const melody = [261.63, 329.63, 392, 329.63, 293.66, 349.23, 440, 349.23];
+
+  function stopMusic() {
+    if (timer) clearInterval(timer);
+    timer = null;
+    if (audio) {
+      audio.close();
+      audio = null;
+    }
+    status.textContent = "Music stopped. Press play whenever you're ready. 💜";
+    play.textContent = "▶ Play";
+  }
+
+  play.addEventListener("click", async function () {
+    stopMusic();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      status.textContent = "Your browser doesn't support this instrumental player.";
+      return;
+    }
+
+    try {
+      audio = new AudioContextClass();
+      await audio.resume();
+      noteIndex = 0;
+
+      function playNote() {
+        if (!audio || audio.state !== "running") return;
+        const oscillator = audio.createOscillator();
+        const volume = audio.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = melody[noteIndex % melody.length];
+        volume.gain.setValueAtTime(0.0001, audio.currentTime);
+        volume.gain.exponentialRampToValueAtTime(0.07, audio.currentTime + 0.05);
+        volume.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.48);
+        oscillator.connect(volume);
+        volume.connect(audio.destination);
+        oscillator.start();
+        oscillator.stop(audio.currentTime + 0.5);
+        noteIndex++;
+      }
+
+      playNote();
+      timer = setInterval(playNote, 550);
+      play.textContent = "▶ Playing";
+      status.textContent = "Mochii Dream is playing! 🎶";
+    } catch (error) {
+      status.textContent = "Couldn't start music. Try tapping play again.";
+    }
+  });
+
+  stop.addEventListener("click", stopMusic);
+
+  document.getElementById("mm-open").addEventListener("click", function () {
+    let value = link.value.trim();
+    try {
+      const url = new URL(value);
+      const validHost = ["youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"].includes(url.hostname);
+      if (url.protocol !== "https:" || !validHost) {
+        throw new Error("Invalid link");
+      }
+      window.open(url.href, "_blank", "noopener,noreferrer");
+      message.textContent = "Opening YouTube in a new tab. 🎵";
+    } catch (error) {
+      message.textContent = "Please paste a valid YouTube link starting with https://";
+    }
+  });
+})();
+</script>
+
+<section id="mochii-video" style="background:#f3edff;color:#493765;padding:22px;border-radius:22px;margin:20px auto;max-width:760px;font-family:Arial,sans-serif;">
+  <h2 style="color:#8063c7;">📹 Mochii Video Calls</h2>
+  <p>Get ready to hang out with your friends! 💜</p>
+
+  <div style="background:white;padding:18px;border-radius:18px;text-align:center;">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <div style="flex:1;min-width:220px;">
+        <h3>🦋 Your camera</h3>
+        <video id="mv-local" autoplay playsinline muted style="width:100%;background:#e8ddff;border-radius:14px;min-height:150px;"></video>
+      </div>
+      <div style="flex:1;min-width:220px;">
+        <h3>🐰 Friend's camera</h3>
+        <video id="mv-remote" autoplay playsinline style="width:100%;background:#e8ddff;border-radius:14px;min-height:150px;"></video>
+      </div>
+    </div>
+
+    <p id="mv-status">Your camera is off. Ask a trusted adult before enabling camera or microphone access.</p>
+    <button type="button" id="mv-start" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:5px;">📷 Turn on my camera</button>
+    <button type="button" id="mv-stop" style="background:#8063c7;color:white;border:0;border-radius:12px;padding:12px;margin:5px;">⏹ Turn off camera</button>
+    <p style="font-size:13px;color:#78669e;">Camera preview only for now. Friends cannot connect until a secure video-calling service is configured.</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  const localVideo = document.getElementById("mv-local");
+  const status = document.getElementById("mv-status");
+  let cameraStream = null;
+
+  document.getElementById("mv-start").addEventListener("click", async function () {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      status.textContent = "Camera access isn't available here. Open the published HTTPS Mochii website in your browser.";
+      return;
+    }
+
+    try {
+      cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      });
+      localVideo.srcObject = cameraStream;
+      status.textContent = "Your camera and microphone are on. 💜 This is only your local preview.";
+    } catch (error) {
+      status.textContent = "Camera access wasn't started. Check browser permissions and try again.";
+    }
+  });
+
+  document.getElementById("mv-stop").addEventListener("click", function () {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(function (track) {
+        track.stop();
+      });
+      cameraStream = null;
+    }
+    localVideo.srcObject = null;
+    status.textContent = "Camera and microphone are off. 💜";
+  });
+})();
+</script>
+
 </html>
