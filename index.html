@@ -116,7 +116,23 @@ footer{text-align:center;padding:25px;color:#776b89}
 </div></section>
 
 <section class="page" id="Profile"><div class="card">
-<h2>💜 My Profile</h2>
+<h2>💜 My Profile</h2><div class="item" id="mochii-account">
+  <h3>🔐 My Mochii Account</h3>
+  <p id="auth-status">Sign in or create your account.</p>
+
+  <label for="auth-email">Email address</label>
+  <input id="auth-email" type="email"
+         autocomplete="email" placeholder="Your email">
+
+  <label for="auth-password">Password</label>
+  <input id="auth-password" type="password"
+         autocomplete="current-password" placeholder="Your password">
+
+  <button type="button" id="email-signup">Create account</button>
+  <button type="button" id="email-signin">Sign in with email</button>
+  <button type="button" id="google-signin">Continue with Google</button>
+  <button type="button" id="signout" hidden>Sign out</button>
+</div>
 <label>What should Mochii call you?</label>
 <input id="username" placeholder="Your display name">
 <button onclick="saveName()">Save my name</button>
