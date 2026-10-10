@@ -479,6 +479,176 @@ showCharacter();
     status.textContent = "Camera and microphone are off. 💜";
   });
 })();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  const SUPABASE_URL = "https://lfvofdiirelodfgbpskf.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_XaB_jFXbO9kPF9VkGU5iMg_MbjJ5i8Z";
+  const APP_URL = "https://34oosunkoya123-cmd.github.io/Mochii/";
 
+  const status = document.getElementById("auth-status");
+  const emailInput = document.getElementById("auth-email");
+  const passwordInput = document.getElementById("auth-password");
+  const signupButton = document.getElementById("email-signup");
+  const signinButton = document.getElementById("email-signin");
+  const googleButton = document.getElementById("google-signin");
+  const signoutButton = document.getElementById("signout");
+
+  if (!window.supabase || SUPABASE_KEY === "sb_publishable_XaB_jFXbO9kPF9VkGU5iMg_MbjJ5i8Z") {
+    status.textContent =
+      "Setup needed: add your Supabase Publishable key to connect sign-in.";
+    return;
+  }
+
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  function showStatus(message) {
+    status.textContent = message;
+  }
+
+  function updateAccount(session) {
+    const signedIn = Boolean(session && session.user);
+
+    signupButton.hidden = signedIn;
+    signinButton.hidden = signedIn;
+    googleButton.hidden = signedIn;
+    signoutButton.hidden = !signedIn;
+
+    if (signedIn) {
+      showStatus(
+        "Signed in as " + (session.user.email || "your account") +
+        ". Your existing creations are still stored in this browser; " +
+        "private account-linked saving is not configured yet."
+      );
+    } else {
+      showStatus("You're signed out. Sign in or create your account.");
+    }
+  }
+
+  function credentials() {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+      showStatus("Enter your email address and password first.");
+      return null;
+    }
+
+    return { email, password };
+  }
+
+  signupButton.addEventListener("click", async function () {
+    const details = credentials();
+    if (!details) return;
+
+    showStatus("Creating your account…");
+
+    const { data, error } = await client.auth.signUp({
+      email: details.email,
+      password: details.password,
+      options: { emailRedirectTo: APP_URL }
+    });
+
+    if (error) {
+      showStatus(error.message);
+      return;
+    }
+
+    if (data.session) {
+      updateAccount(data.session);
+    } else {
+      showStatus(
+        "Account created! Check your email for the confirmation link, " +
+        "then return to Mochii to sign in."
+      );
+    }
+  });
+
+  signinButton.addEventListener("click", async function () {
+    const details = credentials();
+    if (!details) return;
+
+    showStatus("Signing in…");
+
+    const { data, error } = await client.auth.signInWithPassword({
+      email: details.email,
+      password: details.password
+    });
+
+    if (error) {
+      showStatus(error.message);
+      return;
+    }
+
+    updateAccount(data.session);
+  });
+
+  googleButton.addEventListener("click", async function () {
+    showStatus("Opening Google sign-in…");
+
+    const { error } = await client.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: APP_URL }
+    });
+
+    if (error) showStatus(error.message);
+  });
+
+  signoutButton.addEventListener("click", async function () {
+    const { error } = await client.auth.signOut();
+
+    if (error) {
+      showStatus(error.message);
+      return;
+    }
+
+    passwordInput.value = "";
+    updateAccount(null);
+  });
+
+  client.auth.onAuthStateChange(function (_event, session) {
+    updateAccount(session);
+  });
+
+  client.auth.getSession().then(function ({ data, error }) {
+    if (error) {
+      showStatus("Couldn't check your sign-in status. Please reload Mochii.");
+      return;
+    }
+
+    updateAccount(data.session);
+  });
+})();
+</script>
+…
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+(function () {
+  const SUPABASE_URL = "https://lfvofdiirelodfgbpskf.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_XaB_jFXbO9kPF9VkGU5iMg_MbjJ5i8Z";
+  const APP_URL = "https://34oosunkoya123-cmd.github.io/Mochii/";
+
+  const status = document.getElementById("auth-status");
+  const email = document.getElementById("auth-email");
+  const password = document.getElementById("auth-password");
+
+  if (!window.supabase ||
+      SUPABASE_KEY === "PASTE_YOUR_PUBLISHABLE_KEY_HERE") {
+    status.textContent = "Mochii sign-in setup is not finished yet.";
+    return;
+  }
+
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  function showStatus(message) {
+    status.textContent = message;
+  }
 </html>
+ })();
+</script>
