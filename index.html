@@ -480,23 +480,43 @@ showCharacter();
   });
 })();
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function () {
-  const SUPABASE_URL = "https://lfvofdiirelodfgbpskf.supabase.co";
+  const SUPABASE_URL =
+    "https://lfvofdiirelodfgbpskf.supabase.co";
+
+  // Use your existing Supabase publishable key here.
   const SUPABASE_KEY = "sb_publishable_XaB_jFXbO9kPF9VkGU5iMg_MbjJ5i8Z";
-  const APP_URL = "https://34oosunkoya123-cmd.github.io/Mochii/";
+
+  const APP_URL =
+    "https://34oosunkoya123-cmd.github.io/Mochii/";
 
   const status = document.getElementById("auth-status");
-  const emailInput = document.getElementById("auth-email");
-  const passwordInput = document.getElementById("auth-password");
+  const email = document.getElementById("auth-email");
+  const password = document.getElementById("auth-password");
+
   const signupButton = document.getElementById("email-signup");
   const signinButton = document.getElementById("email-signin");
   const googleButton = document.getElementById("google-signin");
   const signoutButton = document.getElementById("signout");
 
-  if (!window.supabase || SUPABASE_KEY === "sb_publishable_XaB_jFXbO9kPF9VkGU5iMg_MbjJ5i8Z") {
-    status.textContent =
-      "Setup needed: add your Supabase Publishable key to connect sign-in.";
+  if (
+    !window.supabase ||
+    !status ||
+    !email ||
+    !password ||
+    !signupButton ||
+    !signinButton ||
+    !googleButton ||
+    !signoutButton ||
+    SUPABASE_KEY === "sb_publishable_XaB_jFXbO9kPF9VkGU5iMg_MbjJ5i8Z"
+  ) {
+    if (status) {
+      status.textContent =
+        "Mochii sign-in setup needs checking.";
+    }
     return;
   }
 
@@ -510,76 +530,70 @@ showCharacter();
   }
 
   function updateAccount(session) {
-    const signedIn = Boolean(session && session.user);
-
-    signupButton.hidden = signedIn;
-    signinButton.hidden = signedIn;
-    googleButton.hidden = signedIn;
-    signoutButton.hidden = !signedIn;
-
-    if (signedIn) {
-      showStatus(
-        "Signed in as " + (session.user.email || "your account") +
-        ". Your existing creations are still stored in this browser; " +
-        "private account-linked saving is not configured yet."
-      );
+    if (session && session.user) {
+      showStatus("You're signed in as " + session.user.email + " 💜");
+      signupButton.hidden = true;
+      signinButton.hidden = true;
+      googleButton.hidden = true;
+      signoutButton.hidden = false;
     } else {
-      showStatus("You're signed out. Sign in or create your account.");
+      showStatus("Sign in or create your Mochii account.");
+      signupButton.hidden = false;
+      signinButton.hidden = false;
+      googleButton.hidden = false;
+      signoutButton.hidden = true;
     }
-  }
-
-  function credentials() {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!email || !password) {
-      showStatus("Enter your email address and password first.");
-      return null;
-    }
-
-    return { email, password };
   }
 
   signupButton.addEventListener("click", async function () {
-    const details = credentials();
-    if (!details) return;
+    const userEmail = email.value.trim();
+    const userPassword = password.value;
 
-    showStatus("Creating your account…");
+    if (!userEmail || !userPassword) {
+      showStatus("Enter your email and password first.");
+      return;
+    }
+
+    showStatus("Creating your account...");
 
     const { data, error } = await client.auth.signUp({
-      email: details.email,
-      password: details.password,
-      options: { emailRedirectTo: APP_URL }
+      email: userEmail,
+      password: userPassword,
+      options: {
+        emailRedirectTo: APP_URL
+      }
     });
 
     if (error) {
-      showStatus(error.message);
+      showStatus("Couldn't create your account: " + error.message);
       return;
     }
 
     if (data.session) {
       updateAccount(data.session);
     } else {
-      showStatus(
-        "Account created! Check your email for the confirmation link, " +
-        "then return to Mochii to sign in."
-      );
+      showStatus("Check your email for the confirmation link! 💌");
     }
   });
 
   signinButton.addEventListener("click", async function () {
-    const details = credentials();
-    if (!details) return;
+    const userEmail = email.value.trim();
+    const userPassword = password.value;
 
-    showStatus("Signing in…");
+    if (!userEmail || !userPassword) {
+      showStatus("Enter your email and password first.");
+      return;
+    }
+
+    showStatus("Signing in...");
 
     const { data, error } = await client.auth.signInWithPassword({
-      email: details.email,
-      password: details.password
+      email: userEmail,
+      password: userPassword
     });
 
     if (error) {
-      showStatus(error.message);
+      showStatus("Couldn't sign in: " + error.message);
       return;
     }
 
@@ -587,25 +601,30 @@ showCharacter();
   });
 
   googleButton.addEventListener("click", async function () {
-    showStatus("Opening Google sign-in…");
+    showStatus("Opening Google sign-in...");
 
     const { error } = await client.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: APP_URL }
+      options: {
+        redirectTo: APP_URL
+      }
     });
 
-    if (error) showStatus(error.message);
+    if (error) {
+      showStatus("Google sign-in failed: " + error.message);
+    }
   });
 
   signoutButton.addEventListener("click", async function () {
+    showStatus("Signing out...");
+
     const { error } = await client.auth.signOut();
 
     if (error) {
-      showStatus(error.message);
+      showStatus("Couldn't sign out. Please try again.");
       return;
     }
 
-    passwordInput.value = "";
     updateAccount(null);
   });
 
@@ -622,6 +641,8 @@ showCharacter();
     updateAccount(data.session);
   });
 })();
+</script>
+
 </script>
 …
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -649,6 +670,10 @@ showCharacter();
   function showStatus(message) {
     status.textContent = message;
   }
-</html>
+  const signupButton = document.getElementById("email-signup");
+  const signinButton = document.getElementById("email-signin");
+  const googleButton = document.getElementById("google-signin");
+  const signoutButton = document.getElementById("signout");
  })();
 </script>
+</html>
